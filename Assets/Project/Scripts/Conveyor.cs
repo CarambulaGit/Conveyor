@@ -1,17 +1,25 @@
-﻿using UnityEngine;
+﻿using System;
+using Project.Classes;
+using UnityEngine;
 
 namespace Project.Scripts {
     public class Conveyor : MonoBehaviour {
         [SerializeField] private new Rigidbody rigidbody;
         [SerializeField] private float speed;
+        public Vector3 MoveDirection { get; private set; }
+        public float GetSpeed() => speed;
 
-        void FixedUpdate() {
-            Move();
+        private void Awake() {
+            MoveDirection = Vector3.forward;
         }
 
-        void Move() {
+        private void FixedUpdate() {
+            Move(rigidbody);
+        }
+
+        private void Move(Rigidbody rigidbody) {
             var oldPos = rigidbody.position;
-            var pos = -transform.forward * (speed * Time.fixedDeltaTime);
+            var pos = -MoveDirection * (speed * Time.fixedDeltaTime);
             rigidbody.position += pos;
             rigidbody.MovePosition(oldPos);
         }
