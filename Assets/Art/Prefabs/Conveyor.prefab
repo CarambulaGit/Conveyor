@@ -64,6 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 7224329329718622959}
   speed: 1
+  TargetPrefab: {fileID: 0}
 --- !u!1 &7210847520770482011
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,6 +74,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4418223695097687094}
+  - component: {fileID: 3261160420033398275}
   m_Layer: 0
   m_Name: Pulleys
   m_TagString: Untagged
@@ -96,6 +98,22 @@ Transform:
   m_Father: {fileID: 3859794850227097361}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3261160420033398275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7210847520770482011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1b4d710224c4531bad61a5e010e744e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulleys:
+  - {fileID: 717666278392430382}
+  - {fileID: 8790139115919370997}
+  belt: {fileID: 5837858180968850915}
 --- !u!1001 &764679428548292934
 PrefabInstance:
   m_ObjectHideFlags: 0
