@@ -390,12 +390,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!4 &1608871535 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3859794850227097361, guid: 234e0639f004ad34bbf07f9ba7aa53e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 8978079420721546864}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2044175174 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5837858180968850915, guid: 234e0639f004ad34bbf07f9ba7aa53e5,
@@ -433,9 +427,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00fc927c503f4779ac653fef33778806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conveyor: {fileID: 8978079420721546867}
   boxPrefab: {fileID: 8341889677023419972, guid: 33ba8604b646e8c44a2c001297079955,
     type: 3}
-  conveyorTransform: {fileID: 1608871535}
+  belt: {fileID: 2044175174}
 --- !u!114 &2046154333
 MonoBehaviour:
   m_ObjectHideFlags: 0
