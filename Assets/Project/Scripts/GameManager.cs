@@ -10,17 +10,9 @@ namespace Project.Scripts {
         [SerializeField] private TargetController targetController;
         [SerializeField] private BoxController boxController;
 
-        private Target activeTarget;
-        private Box activeBox;
-
-        public void DestroyGO(GameObject go) {
-            Destroy(go);
-        }
-
-        public void DestroyMB(MonoBehaviour monoBehaviour) {
-            Destroy(monoBehaviour);
-        }
-
+        public Target ActiveTarget => targetController._target;
+        public Box ActiveBox => boxController._box;
+        
         private void Awake() {
             if (Instance != null) {
                 Debug.Log("There is must be only one GameManager");
@@ -39,11 +31,11 @@ namespace Project.Scripts {
         }
 
         private void CreateBox() {
-            activeBox = boxController.CreateBox();
+            boxController.CreateBox();
         }
 
         private void CreateTarget() {
-            activeTarget = targetController.CreateTarget();
+            targetController.CreateTarget();
         }
     }
 }
