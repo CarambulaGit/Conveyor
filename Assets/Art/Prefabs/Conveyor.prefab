@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3859794850227097361}
   - component: {fileID: 7224329329718622959}
   - component: {fileID: 4475914915263558475}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Conveyor
-  m_TagString: Untagged
+  m_TagString: Conveyor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,7 +64,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 7224329329718622959}
   speed: 1
-  TargetPrefab: {fileID: 0}
 --- !u!1 &7210847520770482011
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4418223695097687094}
   - component: {fileID: 3261160420033398275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pulleys
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,6 +124,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Belt
+      objectReference: {fileID: 0}
+    - target: {fileID: 401142351938158827, guid: 50406fee488739c4abdc30143c4b591e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3280627079001377289, guid: 50406fee488739c4abdc30143c4b591e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5315368714179137502, guid: 50406fee488739c4abdc30143c4b591e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5823704502218687050, guid: 50406fee488739c4abdc30143c4b591e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6600186840721577125, guid: 50406fee488739c4abdc30143c4b591e,
         type: 3}
@@ -180,6 +199,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7956492762934564748, guid: 50406fee488739c4abdc30143c4b591e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50406fee488739c4abdc30143c4b591e, type: 3}
@@ -261,6 +285,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pulley
       objectReference: {fileID: 0}
+    - target: {fileID: 8345834468046493974, guid: b09d9faa3ab12f14380edfc5cfe18b6a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b09d9faa3ab12f14380edfc5cfe18b6a, type: 3}
 --- !u!4 &717666278392430382 stripped
@@ -340,6 +369,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pulley
+      objectReference: {fileID: 0}
+    - target: {fileID: 8345834468046493974, guid: b09d9faa3ab12f14380edfc5cfe18b6a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b09d9faa3ab12f14380edfc5cfe18b6a, type: 3}
