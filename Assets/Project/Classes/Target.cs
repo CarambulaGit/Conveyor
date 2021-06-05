@@ -3,8 +3,12 @@ using UnityEngine;
 
 namespace Project.Classes {
     public class Target : GameObj {
-        public Target(Transform transform, Conveyor conveyor, Transform belt, NeedToDestroy onNeedToDestroy) : base(
-            transform, conveyor, belt, onNeedToDestroy) { }
+        public TargetController TargetController { get; private set; }
+
+        public Target(Transform transform, Conveyor conveyor, Transform belt, TargetController targetController,
+            NeedToDestroy onNeedToDestroy) : base(transform, conveyor, belt, onNeedToDestroy) {
+            TargetController = targetController;
+        }
 
         public void Move(float fixedDeltaTime) {
             CheckDistance();

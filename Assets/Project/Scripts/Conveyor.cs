@@ -6,6 +6,7 @@ namespace Project.Scripts {
     public class Conveyor : MonoBehaviour {
         [SerializeField] private new Rigidbody rigidbody;
         [SerializeField] private float speed;
+        
         public Vector3 MoveDirection { get; private set; }
         public float GetSpeed() => speed;
 
@@ -22,6 +23,14 @@ namespace Project.Scripts {
             var pos = -MoveDirection * (speed * Time.fixedDeltaTime);
             rigidbody.position += pos;
             rigidbody.MovePosition(oldPos);
+        }
+
+        private void OnCollisionEnter(Collision other) {
+            if (other.gameObject.TryGetComponent<BoxController>(out var boxController)) {
+                GameManager.Instance.CalculateScore(boxController);
+                boxController.ConnectedTarget.TargetController.RemoveTarget();
+            }
+
         }
     }
 }

@@ -4,21 +4,34 @@ using UnityEngine;
 
 namespace Project.Scripts {
     public class BoxController : MonoBehaviour {
-        [SerializeField] private Conveyor conveyor;
-        [SerializeField] private Transform boxPrefab;
-        [SerializeField] private Transform belt;
-
-        private readonly Vector3 _vectorUp = 3 * Vector3.up;
+        private string conveyorTag = "Conveyor";
+        private string beltTag = "Belt";
+        private Conveyor conveyor;
+        private Transform belt;
 
         public Box _box { get; private set; }
+        private Target _connectedTarget;
+
+        public Target ConnectedTarget {
+            get => _connectedTarget;
+            set {
+                if (ConnectedTarget != null) return;
+                _connectedTarget = value;
+            }
+        }
+
+
+        private void Awake() {
+            conveyor = GameObject.FindWithTag(conveyorTag).GetComponent<Conveyor>();
+            belt = GameObject.FindWithTag(beltTag).transform;
+        }
 
         private void FixedUpdate() {
             _box?.CheckDistance();
         }
 
         public Box CreateBox() {
-            var box = Instantiate(boxPrefab, conveyor.transform.position + _vectorUp, boxPrefab.rotation); // todo
-            _box = new Box(box, conveyor, belt, RemoveBox);
+            _box = new Box(transform, conveyor, belt, this, RemoveBox);
             return _box;
         }
 
