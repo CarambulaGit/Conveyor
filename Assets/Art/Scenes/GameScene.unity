@@ -281,7 +281,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 0
@@ -390,12 +390,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!4 &2044175174 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5837858180968850915, guid: 234e0639f004ad34bbf07f9ba7aa53e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 8978079420721546864}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2046154331
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,8 +400,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2046154335}
   - component: {fileID: 2046154334}
-  - component: {fileID: 2046154333}
-  - component: {fileID: 2046154332}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -415,38 +407,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2046154332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046154331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00fc927c503f4779ac653fef33778806, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  conveyor: {fileID: 8978079420721546867}
-  boxPrefab: {fileID: 8341889677023419972, guid: 33ba8604b646e8c44a2c001297079955,
-    type: 3}
-  belt: {fileID: 2044175174}
---- !u!114 &2046154333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046154331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 392b4aaed447489faeaddd2675d2f143, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  conveyor: {fileID: 8978079420721546867}
-  targetPrefab: {fileID: 574608569962794366, guid: c3ab33d60ead4764eb3e2bedd43b8ae0,
-    type: 3}
-  belt: {fileID: 2044175174}
 --- !u!114 &2046154334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,8 +420,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   conveyor: {fileID: 8978079420721546867}
-  targetController: {fileID: 2046154333}
-  boxController: {fileID: 2046154332}
+  boxPrefab: {fileID: 8341889677023419972, guid: 33ba8604b646e8c44a2c001297079955,
+    type: 3}
+  targetPrefab: {fileID: 574608569962794366, guid: c3ab33d60ead4764eb3e2bedd43b8ae0,
+    type: 3}
+  scoreForUnitCoef: 200
+  maximumScoreValue: 100
 --- !u!4 &2046154335
 Transform:
   m_ObjectHideFlags: 0
@@ -608,11 +572,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7224329329718622959, guid: 234e0639f004ad34bbf07f9ba7aa53e5,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7275437520199165642, guid: 234e0639f004ad34bbf07f9ba7aa53e5,
         type: 3}
