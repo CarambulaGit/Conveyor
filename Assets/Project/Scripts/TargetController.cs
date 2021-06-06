@@ -41,8 +41,20 @@ namespace Project.Scripts {
         }
 
         public void RemoveTarget() {
+            var connectedBoxController = ConnectedBox.BoxController;
+            if (connectedBoxController.StillNotFall) {
+                GameManager.Instance.CalculateScore(connectedBoxController);
+                connectedBoxController.DestroyBox();
+                GameManager.Instance.CreatePair();
+            }
+
+            DestroyTarget();
+        }
+
+        public void DestroyTarget() {
             Destroy(_target.Transform.gameObject);
             _target = null;
         }
+        
     }
 }
