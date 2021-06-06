@@ -4,14 +4,29 @@ using UnityEngine;
 
 namespace Project.Scripts {
     public class Conveyor : MonoBehaviour {
+        private enum Direction {
+            Forward,
+            Back
+        }
+        
         [SerializeField] private new Rigidbody rigidbody;
         [SerializeField] private float speed;
+        [SerializeField] private Direction dir;
         
         public Vector3 MoveDirection { get; private set; }
         public float GetSpeed() => speed;
 
         private void Awake() {
-            MoveDirection = Vector3.forward;
+            switch (dir) {
+                case Direction.Forward:
+                    MoveDirection = transform.forward;
+                    break;
+                case Direction.Back:
+                    MoveDirection = -transform.forward;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void FixedUpdate() {
@@ -23,14 +38,6 @@ namespace Project.Scripts {
             var pos = -MoveDirection * (speed * Time.fixedDeltaTime);
             rigidbody.position += pos;
             rigidbody.MovePosition(oldPos);
-        }
-
-        private void OnCollisionEnter(Collision other) {
-            if (other.gameObject.TryGetComponent<BoxController>(out var boxController)) {
-                GameManager.Instance.CalculateScore(boxController);
-                boxController.ConnectedTarget.TargetController.RemoveTarget();
-            }
-
         }
     }
 }
