@@ -6,9 +6,10 @@ namespace Project.Scripts {
     public class GameManager : MonoBehaviour {
         public static GameManager Instance { get; private set; }
 
-        private readonly Vector3 _vectorUp = 3 * Vector3.up;
+        private readonly Vector3 _vectorUp = 7 * Vector3.up;
 
         [SerializeField] private Conveyor conveyor;
+        [SerializeField] private Transform belt;
         [SerializeField] private Transform boxPrefab;
         [SerializeField] private Transform targetPrefab;
         [SerializeField] private float scoreForUnitCoef;
@@ -17,9 +18,10 @@ namespace Project.Scripts {
         private TargetController _targetController;
         private BoxController _boxController;
         private float _score;
+        private bool _isReady;
 
         public Target ActiveTarget => _targetController._target;
-        public Box ActiveBox => _boxController._box;
+        public Box ActiveBox => _boxController.Box;
 
         private void Awake() {
             if (Instance != null) {
@@ -33,12 +35,22 @@ namespace Project.Scripts {
 
         private void Update() {
             if (Input.touchCount > 0 || Input.GetMouseButtonDown(0)) {
-                CreateTarget();
-                CreateBox();
-                ConnectBoxAndTarget();
+                if (!_isReady) {
+                    CreatePair();
+                    _isReady = true;
+                    return;
+                }
+
+                _boxController.DisableKinematic();
             }
 
             Debug.Log(_score);
+        }
+
+        public void CreatePair() {
+            CreateTarget();
+            CreateBox();
+            ConnectBoxAndTarget();
         }
 
         private void CreateBox() {
@@ -48,18 +60,19 @@ namespace Project.Scripts {
         }
 
         private void CreateTarget() {
-            var target = Instantiate(targetPrefab, new Vector3(0, 1.3f, -4.79f), targetPrefab.rotation); // todo
+            var targetPos = conveyor.transform.position - conveyor.MoveDirection * belt.localScale.z / 2.1f + Vector3.up * conveyor.transform.localScale.y / 1.8f;
+            var target = Instantiate(targetPrefab, targetPos, targetPrefab.rotation); // todo
             _targetController = target.GetComponent<TargetController>();
             _targetController.CreateTarget();
         }
 
         private void ConnectBoxAndTarget() {
             _boxController.ConnectedTarget = _targetController._target;
-            _targetController.ConnectedBox = _boxController._box;
+            _targetController.ConnectedBox = _boxController.Box;
         }
 
         private float FindCurrentScore(BoxController boxController) {
-            var diffVect = boxController._box.Transform.position - boxController.ConnectedTarget.Transform.position;
+            var diffVect = boxController.Box.Transform.position - boxController.ConnectedTarget.Transform.position;
             diffVect.y = 0;
             return maximumScoreValue - diffVect.magnitude * scoreForUnitCoef;
         }
