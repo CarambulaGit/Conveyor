@@ -26,18 +26,14 @@ namespace Project.Scripts {
         }
 
         private void FixedUpdate() {
-            if (_target != null) {
-                MoveTarget(_target);
-            }
+            if (!GameManager.Instance.GameOn) return;
+            _target?.Move(Time.fixedDeltaTime);
+
         }
 
         public Target CreateTarget() {
             _target = new Target(transform, conveyor, belt, this, RemoveTarget);
             return _target;
-        }
-
-        private void MoveTarget(Target target) {
-            target.Move(Time.fixedDeltaTime);
         }
 
         public void RemoveTarget() {
@@ -55,6 +51,5 @@ namespace Project.Scripts {
             Destroy(_target.Transform.gameObject);
             _target = null;
         }
-        
     }
 }

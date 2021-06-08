@@ -30,6 +30,7 @@ namespace Project.Scripts {
         }
 
         private void FixedUpdate() {
+            if (!GameManager.Instance.GameOn) return;
             Move(rigidbody);
         }
 

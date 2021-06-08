@@ -29,7 +29,8 @@ namespace Project.Scripts {
         }
 
         private void FixedUpdate() {
-            Box?.CheckDistance();
+            if (!GameManager.Instance.GameOn) return;
+                Box?.CheckDistance();
         }
 
         public Box CreateBox() {
