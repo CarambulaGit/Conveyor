@@ -1,6 +1,7 @@
 ﻿using System;
 using Project.Classes;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Project.Scripts {
     public class GameManager : MonoBehaviour {
@@ -14,11 +15,54 @@ namespace Project.Scripts {
         [SerializeField] private Transform targetPrefab;
         [SerializeField] private float scoreForUnitCoef;
         [SerializeField] private float maximumScoreValue;
+        [SerializeField] private float startTime;
 
         private TargetController _targetController;
         private BoxController _boxController;
-        private float _score;
-        private bool _isReady;
+        private bool _gameOn;
+        private int _score;
+        private float _currentTime;
+
+        public bool GameOn {
+            get => _gameOn;
+            private set {
+                if (_gameOn == value) return;
+                _gameOn = value;
+                if (_gameOn) { onStartGame.Invoke(); }
+            }
+        }
+
+        public UnityEvent onStartGame;
+        public UnityEvent onScoreChanged;
+        public UnityEvent onTimeChanged;
+        public UnityEvent onTimeUp;
+
+        public int Score {
+            get => _score;
+            private set {
+                if (_score == value) return;
+                _score = value;
+                onScoreChanged?.Invoke();
+            }
+        }
+
+        public float CurrentTime {
+            get => _currentTime;
+            private set {
+                if (Math.Abs(_currentTime - value) < Constants.EPSILON) return;
+                if (value > 0) {
+                    _currentTime = value;
+                }
+                else {
+                    _currentTime = 0;
+                    _gameOn = false;
+                    onTimeUp?.Invoke();
+                }
+
+                onTimeChanged?.Invoke();
+            }
+        }
+
 
         public Target ActiveTarget => _targetController._target;
         public Box ActiveBox => _boxController.Box;
@@ -31,20 +75,31 @@ namespace Project.Scripts {
             }
 
             Instance = this;
+
+            CurrentTime = startTime;
         }
 
         private void Update() {
+            if (CurrentTime > 0) {
+                HandleTouch();
+                UpdateTime();
+            }
+        }
+
+        private void UpdateTime() {
+            CurrentTime -= Time.deltaTime;
+        }
+
+        private void HandleTouch() {
             if (Input.touchCount > 0 || Input.GetMouseButtonDown(0)) {
-                if (!_isReady) {
+                if (!GameOn) {
                     CreatePair();
-                    _isReady = true;
+                    GameOn = true;
                     return;
                 }
 
                 _boxController.DisableKinematic();
             }
-
-            Debug.Log(_score);
         }
 
         public void CreatePair() {
@@ -60,8 +115,9 @@ namespace Project.Scripts {
         }
 
         private void CreateTarget() {
-            var targetPos = conveyor.transform.position - conveyor.MoveDirection * belt.localScale.z / 2.1f + Vector3.up * conveyor.transform.localScale.y / 1.8f;
-            var target = Instantiate(targetPrefab, targetPos, targetPrefab.rotation); // todo
+            var targetPos = conveyor.transform.position - conveyor.MoveDirection * belt.localScale.z / 2.1f +
+                            Vector3.up * conveyor.transform.localScale.y / 1.8f; // todo
+            var target = Instantiate(targetPrefab, targetPos, targetPrefab.rotation);
             _targetController = target.GetComponent<TargetController>();
             _targetController.CreateTarget();
         }
@@ -71,14 +127,14 @@ namespace Project.Scripts {
             _targetController.ConnectedBox = _boxController.Box;
         }
 
-        private float FindCurrentScore(BoxController boxController) {
+        private int FindCurrentScore(BoxController boxController) {
             var diffVect = boxController.Box.Transform.position - boxController.ConnectedTarget.Transform.position;
             diffVect.y = 0;
-            return maximumScoreValue - diffVect.magnitude * scoreForUnitCoef;
+            return (int) (maximumScoreValue - diffVect.magnitude * scoreForUnitCoef);
         }
 
         public void CalculateScore(BoxController boxController) {
-            _score += FindCurrentScore(boxController);
+            Score += FindCurrentScore(boxController);
         }
     }
 }
