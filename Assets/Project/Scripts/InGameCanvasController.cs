@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Project.Scripts {
-    public class CanvasController : MonoBehaviour {
-        [SerializeField] private GameObject BeforeGame;
-        [SerializeField] private GameObject InGame;
-        [SerializeField] private GameObject AfterGame;
+    public class InGameCanvasController : MonoBehaviour {
+        [SerializeField] private GameObject beforeGame;
+        [SerializeField] private GameObject inGame;
+        [SerializeField] private GameObject afterGame;
         [SerializeField] private TextMeshProUGUI scoreValue;
         [SerializeField] private TextMeshProUGUI timeValue;
 
@@ -22,22 +22,22 @@ namespace Project.Scripts {
         }
 
         public void ActivateBeforeGame() {
-            ActivateMenu(true, false, false);
+            Activate(true, false, false);
         }
 
         public void ActivateInGame() {
-            ActivateMenu(false, true, false);
+            Activate(false, true, false);
 
         }
 
         public void ActivateAfterGame() {
-            ActivateMenu(false, false, true);
+            Activate(false, false, true);
         }
 
-        private void ActivateMenu(bool beforeGame, bool inGame, bool afterGame) {
-            BeforeGame.SetActive(beforeGame);
-            InGame.SetActive(inGame);
-            AfterGame.SetActive(afterGame);
+        private void Activate(bool _beforeGame, bool _inGame, bool _afterGame) {
+            beforeGame.SetActive(_beforeGame);
+            inGame.SetActive(_inGame);
+            afterGame.SetActive(_afterGame);
         }
     }
 }
