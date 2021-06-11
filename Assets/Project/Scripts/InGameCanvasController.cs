@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Project.Classes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,15 +10,22 @@ namespace Project.Scripts {
         [SerializeField] private GameObject beforeGame;
         [SerializeField] private GameObject inGame;
         [SerializeField] private GameObject afterGame;
+        [SerializeField] private GameObject pause;
         [SerializeField] private TextMeshProUGUI scoreValue;
         [SerializeField] private TextMeshProUGUI timeValue;
+        
+        private GameManager _gameManager;
+
+        private void Awake() {
+            _gameManager = GameObject.FindWithTag(Constants.GAME_MANAGER_TAG).GetComponent<GameManager>();
+        }
 
         public void UpdateScore() {
-            scoreValue.text = GameManager.Instance.Score.ToString(CultureInfo.InvariantCulture);
+            scoreValue.text = _gameManager.Score.ToString(CultureInfo.InvariantCulture);
         }
 
         public void UpdateTime() {
-            var time = TimeSpan.FromSeconds(GameManager.Instance.CurrentTime);
+            var time = TimeSpan.FromSeconds(_gameManager.CurrentTime);
             timeValue.text = $"{time.Minutes}:{time.Seconds}";
         }
 
@@ -38,6 +46,16 @@ namespace Project.Scripts {
             beforeGame.SetActive(_beforeGame);
             inGame.SetActive(_inGame);
             afterGame.SetActive(_afterGame);
+        }
+
+        public void Pause() {
+            Time.timeScale = 0f;
+            pause.SetActive(true);
+        }
+
+        public void Unpause() {
+            Time.timeScale = 1f;
+            pause.SetActive(false);
         }
     }
 }

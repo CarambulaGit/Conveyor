@@ -8,15 +8,18 @@ namespace Project.Scripts {
             Forward,
             Back
         }
-        
+
         [SerializeField] private new Rigidbody rigidbody;
         [SerializeField] private float speed;
         [SerializeField] private Direction dir;
-        
+
+        private GameManager _gameManager;
+
         public Vector3 MoveDirection { get; private set; }
         public float GetSpeed() => speed;
 
         private void Awake() {
+            _gameManager = GameObject.FindWithTag(Constants.GAME_MANAGER_TAG).GetComponent<GameManager>();
             switch (dir) {
                 case Direction.Forward:
                     MoveDirection = transform.forward;
@@ -30,7 +33,7 @@ namespace Project.Scripts {
         }
 
         private void FixedUpdate() {
-            if (!GameManager.Instance.GameOn) return;
+            if (!_gameManager.GameOn) return;
             Move(rigidbody);
         }
 

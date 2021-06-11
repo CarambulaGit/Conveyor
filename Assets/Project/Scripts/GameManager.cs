@@ -2,11 +2,10 @@
 using Project.Classes;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Project.Scripts {
     public class GameManager : MonoBehaviour {
-        public static GameManager Instance { get; private set; }
-
         private readonly Vector3 _vectorUp = 7 * Vector3.up;
 
         [SerializeField] private Conveyor conveyor;
@@ -68,14 +67,6 @@ namespace Project.Scripts {
         public Box ActiveBox => _boxController.Box;
 
         private void Awake() {
-            if (Instance != null) {
-                Debug.Log("There is must be only one GameManager");
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-
             CurrentTime = startTime;
         }
 
@@ -91,7 +82,10 @@ namespace Project.Scripts {
         }
 
         private void HandleTouch() {
-            if (Input.touchCount > 0 || Input.GetMouseButtonDown(0)) {
+            var touchCondition = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began &&
+                                 !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+            var mouseCondition = Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject();
+            if (touchCondition || mouseCondition) {
                 if (!GameOn) {
                     CreatePair();
                     GameOn = true;

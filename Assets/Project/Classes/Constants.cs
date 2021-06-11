@@ -7,6 +7,14 @@
         public const string GAME_SCENE_NAME = "GameScene";
         public const string MAIN_MENU_SCENE_NAME = "MainMenu";
 
+        #endregion;
+
+        #region Tags
+
+        public const string GAME_MANAGER_TAG = "GameController";
+        public const string CONVEYOR_TAG = "Conveyor";
+        public const string BELT_TAG = "Belt";
+
         #endregion
 
         #region PlayerPrefsKeys

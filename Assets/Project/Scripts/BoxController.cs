@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Project.Scripts {
     public class BoxController : MonoBehaviour {
-        private readonly string _conveyorTag = "Conveyor";
-        private readonly string _beltTag = "Belt";
         private Conveyor _conveyor;
         private Transform _belt;
         private Target _connectedTarget;
+        private GameManager _gameManager;
         private bool _alreadyCalculated;
+
 
         public Box Box { get; private set; }
 
@@ -24,12 +24,13 @@ namespace Project.Scripts {
         public bool StillNotFall { get; private set; } = true;
 
         private void Awake() {
-            _conveyor = GameObject.FindWithTag(_conveyorTag).GetComponent<Conveyor>();
-            _belt = GameObject.FindWithTag(_beltTag).transform;
+            _conveyor = GameObject.FindWithTag(Constants.CONVEYOR_TAG).GetComponent<Conveyor>();
+            _belt = GameObject.FindWithTag(Constants.BELT_TAG).transform;
+            _gameManager = GameObject.FindWithTag(Constants.GAME_MANAGER_TAG).GetComponent<GameManager>();
         }
 
         private void FixedUpdate() {
-            if (!GameManager.Instance.GameOn) return;
+            if (!_gameManager.GameOn) return;
                 Box?.CheckDistance();
         }
 
@@ -51,15 +52,13 @@ namespace Project.Scripts {
         private void OnCollisionEnter(Collision other) {
             if (_alreadyCalculated) return;
 
-            if (other.gameObject.CompareTag(_conveyorTag)) {
+            if (other.gameObject.CompareTag(Constants.CONVEYOR_TAG)) {
                 StillNotFall = false;
-                GameManager.Instance.CalculateScore(this);
+                _gameManager.CalculateScore(this);
                 _alreadyCalculated = true;
                 ConnectedTarget.TargetController.RemoveTarget();
-                GameManager.Instance.CreatePair();
+                _gameManager.CreatePair();
             }
         }
-
-        // todo event of falling 
     }
 }

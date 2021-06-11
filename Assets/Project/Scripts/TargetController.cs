@@ -8,9 +8,10 @@ namespace Project.Scripts {
         private string beltTag = "Belt";
         private Conveyor conveyor;
         private Transform belt;
+        private Box _connectedBox;
+        private GameManager _gameManager;
 
         public Target _target { get; private set; }
-        private Box _connectedBox;
 
         public Box ConnectedBox {
             get => _connectedBox;
@@ -21,12 +22,13 @@ namespace Project.Scripts {
         }
 
         private void Awake() {
+            _gameManager = GameObject.FindWithTag(Constants.GAME_MANAGER_TAG).GetComponent<GameManager>();
             conveyor = GameObject.FindWithTag(conveyorTag).GetComponent<Conveyor>();
             belt = GameObject.FindWithTag(beltTag).transform;
         }
 
         private void FixedUpdate() {
-            if (!GameManager.Instance.GameOn) return;
+            if (!_gameManager.GameOn) return;
             _target?.Move(Time.fixedDeltaTime);
 
         }
@@ -39,9 +41,9 @@ namespace Project.Scripts {
         public void RemoveTarget() {
             var connectedBoxController = ConnectedBox.BoxController;
             if (connectedBoxController.StillNotFall) {
-                GameManager.Instance.CalculateScore(connectedBoxController);
+                _gameManager.CalculateScore(connectedBoxController);
                 connectedBoxController.DestroyBox();
-                GameManager.Instance.CreatePair();
+                _gameManager.CreatePair();
             }
 
             DestroyTarget();
