@@ -27,7 +27,9 @@ namespace Project.Scripts {
             private set {
                 if (_gameOn == value) return;
                 _gameOn = value;
-                if (_gameOn) { onStartGame.Invoke(); }
+                if (_gameOn) {
+                    onStartGame.Invoke();
+                }
             }
         }
 
@@ -73,6 +75,7 @@ namespace Project.Scripts {
         private void Update() {
             if (CurrentTime > 0) {
                 HandleTouch();
+                if (!GameOn) return;
                 UpdateTime();
             }
         }
