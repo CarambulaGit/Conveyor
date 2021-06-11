@@ -1485,9 +1485,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ae81ec95d0774244a4345256a1039b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BeforeGame: {fileID: 1810211301}
-  InGame: {fileID: 1052856989}
-  AfterGame: {fileID: 368689478}
+  beforeGame: {fileID: 1810211301}
+  inGame: {fileID: 1052856989}
+  afterGame: {fileID: 368689478}
   scoreValue: {fileID: 409766113}
   timeValue: {fileID: 134231574}
 --- !u!1 &2046154331
