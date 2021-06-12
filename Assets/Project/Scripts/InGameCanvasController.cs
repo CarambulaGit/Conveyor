@@ -3,6 +3,7 @@ using System.Globalization;
 using Project.Classes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Project.Scripts {
@@ -26,7 +27,8 @@ namespace Project.Scripts {
 
         public void UpdateTime() {
             var time = TimeSpan.FromSeconds(_gameManager.CurrentTime);
-            timeValue.text = $"{time.Minutes}:{time.Seconds}";
+            var sec = time.Seconds > 9 ? time.Seconds.ToString() : "0" + time.Seconds; 
+            timeValue.text = $"{time.Minutes}:{sec}";
         }
 
         public void ActivateBeforeGame() {
@@ -56,6 +58,16 @@ namespace Project.Scripts {
         public void Unpause() {
             Time.timeScale = 1f;
             pause.SetActive(false);
+        }
+
+        public void Restart() {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(Constants.GAME_SCENE_NAME);
+        }
+
+        public void GoToMainMenu() {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
         }
     }
 }
