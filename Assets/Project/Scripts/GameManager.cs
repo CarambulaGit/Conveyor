@@ -86,8 +86,9 @@ namespace Project.Scripts {
 
         private void HandleTouch() {
             var touchCondition = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began &&
-                                 !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
-            var mouseCondition = Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject();
+                                 (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) || !_gameOn);
+            var mouseCondition = Input.GetMouseButtonDown(0) &&
+                                 (!EventSystem.current.IsPointerOverGameObject() || !_gameOn);
             if (touchCondition || mouseCondition) {
                 if (!GameOn) {
                     CreatePair();
