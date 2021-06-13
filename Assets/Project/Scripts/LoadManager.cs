@@ -8,6 +8,7 @@ namespace Project.Scripts {
         // private LoadData loadData;
 
         private void Awake() {
+            DontDestroyOnLoad(gameObject);
             // PlayerPrefs.DeleteAll(); // todo remove
             Coins.Instance.Load();
             // Coins.Instance.AddCoins(30);
