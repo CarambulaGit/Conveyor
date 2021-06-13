@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Project.Classes;
 using Project.ScriptableObjects;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using MaterialsContent = Project.Classes.ConveyorMaterial.ConveyorMaterialsContent;
@@ -11,6 +12,7 @@ namespace Project.Scripts {
         [SerializeField] private GameObject menu;
         [SerializeField] private GameObject shop;
         [SerializeField] private List<ConveyorMaterialManager> materialsManagers;
+        [SerializeField] private TextMeshProUGUI coins;
 
         public List<ConveyorMaterial> _conveyorMaterials { get; private set; } = new List<ConveyorMaterial>();
 
@@ -22,6 +24,12 @@ namespace Project.Scripts {
             foreach (var manager in materialsManagers) {
                 _conveyorMaterials.Add(new ConveyorMaterial(manager.GetMaterial()));
             }
+
+            Coins.Instance.OnCoinsValueChanged += UpdateCoins;
+        }
+
+        private void Start() {
+            UpdateCoins();
         }
 
         public void StartGame() {
@@ -39,6 +47,10 @@ namespace Project.Scripts {
         private void Activate(bool _menu, bool _shop) {
             menu.SetActive(_menu);
             shop.SetActive(_shop);
+        }
+
+        private void UpdateCoins() {
+            coins.text = Coins.Instance.CoinsValue.ToString();
         }
     }
 }

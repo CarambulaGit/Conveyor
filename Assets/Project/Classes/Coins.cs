@@ -3,6 +3,8 @@
 namespace Project.Classes {
     public class Coins {
         public static Coins Instance { get; private set; } = new Coins();
+        public delegate void ValueChanged();
+        public event ValueChanged OnCoinsValueChanged;
         private int _coinsValue;
         public int CoinsValue {
             get => _coinsValue;
@@ -10,6 +12,7 @@ namespace Project.Classes {
                 if (_coinsValue == value) return;
                 _coinsValue = value;
                 PlayerPrefs.SetInt(Constants.COINS_KEY, _coinsValue);
+                OnCoinsValueChanged?.Invoke();
             } 
         }
 
@@ -28,7 +31,7 @@ namespace Project.Classes {
         }
 
         public void Load() {
-            CoinsValue = PlayerPrefs.GetInt(Constants.COINS_KEY, 0);
+            CoinsValue = PlayerPrefs.GetInt(Constants.COINS_KEY, 100);
         }
     }
 }
