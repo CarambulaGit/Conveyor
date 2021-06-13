@@ -12,8 +12,11 @@ namespace Project.Scripts {
         [SerializeField] private GameObject inGame;
         [SerializeField] private GameObject afterGame;
         [SerializeField] private GameObject pause;
+        [SerializeField] private GameObject time;
+        [SerializeField] private GameObject amountOfBoxes;
         [SerializeField] private TextMeshProUGUI scoreValue;
         [SerializeField] private TextMeshProUGUI timeValue;
+        [SerializeField] private TextMeshProUGUI boxValue;
         [SerializeField] private TextMeshProUGUI scoreAfterGameValue;
         [SerializeField] private TextMeshProUGUI bestScoreValue;
         
@@ -21,7 +24,26 @@ namespace Project.Scripts {
 
         private void Awake() {
             _gameManager = GameObject.FindWithTag(Constants.GAME_MANAGER_TAG).GetComponent<GameManager>();
-            _gameManager.onTimeUp.AddListener(AfterGameInfoUpdate);
+            _gameManager.onGameEnd.AddListener(AfterGameInfoUpdate);
+            switch (GameMode.CurrentGameMode) {
+                case GameMode.Mode.Timer:
+                    ActivateCondition(true, false);
+                    break;
+                case GameMode.Mode.LimitedBoxes:
+                    ActivateCondition(false, true);
+                    break;
+                case GameMode.Mode.FirstLessZero:
+                    ActivateCondition(false, false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+        }
+
+        private void ActivateCondition(bool _time, bool _amountOfBoxes) {
+            time.SetActive(_time);
+            amountOfBoxes.SetActive(_amountOfBoxes);
         }
 
         public void UpdateScore() {
@@ -32,6 +54,10 @@ namespace Project.Scripts {
             var time = TimeSpan.FromSeconds(_gameManager.CurrentTime);
             var sec = time.Seconds > 9 ? time.Seconds.ToString() : "0" + time.Seconds; 
             timeValue.text = $"{time.Minutes}:{sec}";
+        }
+
+        public void UpdateBoxes() {
+            boxValue.text = _gameManager.AmountOfBoxes.ToString();
         }
 
         public void ActivateBeforeGame() {
@@ -75,7 +101,7 @@ namespace Project.Scripts {
 
         private void AfterGameInfoUpdate() {
             scoreAfterGameValue.text = _gameManager.Score.ToString();
-            bestScoreValue.text = PlayerPrefs.GetInt(Constants.BEST_SCORE_KEY).ToString();
+            bestScoreValue.text = PlayerPrefs.GetInt(_gameManager.BestScoreKey).ToString();
         }
     }
 }

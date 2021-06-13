@@ -58,6 +58,7 @@ namespace Project.Scripts {
                 _alreadyCalculated = true;
                 ConnectedTarget.TargetController.RemoveTarget();
                 _gameManager.CreatePair();
+                _gameManager.DecreaseAmountOfBoxes();
             }
         }
     }

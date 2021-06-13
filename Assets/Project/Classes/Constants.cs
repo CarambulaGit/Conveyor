@@ -23,7 +23,9 @@
         public const string COINS_KEY = "coins";
         public const string MATERIALS_KEY = "materials";
         public const string CURRENT_MATERIAL_KEY = "currentMat";
-        public const string BEST_SCORE_KEY = "bestScore";
+        public const string TIMER_BEST_SCORE_KEY = "timerBestScore";
+        public const string LIMITED_BOXES_BEST_SCORE_KEY = "limitedBoxesBestScore";
+        public const string FIRST_LESS_ZERO_BEST_SCORE_KEY = "firstLessZeroBestScore";
 
         #endregion
     }

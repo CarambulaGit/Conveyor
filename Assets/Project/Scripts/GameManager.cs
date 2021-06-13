@@ -9,18 +9,25 @@ namespace Project.Scripts {
         private readonly Vector3 _vectorUp = 7 * Vector3.up;
 
         [SerializeField] private Conveyor conveyor;
+        [SerializeField] private InGameCanvasController canvasController;
         [SerializeField] private Transform belt;
         [SerializeField] private Transform boxPrefab;
         [SerializeField] private Transform targetPrefab;
         [SerializeField] private float scoreForUnitCoef;
         [SerializeField] private float maximumScoreValue;
         [SerializeField] private float startTime;
+        [SerializeField] private int amountOfBoxes;
 
         private TargetController _targetController;
         private BoxController _boxController;
+        private GameMode.Mode _gameMode;
         private bool _gameOn;
         private int _score;
         private float _currentTime;
+        private int _amountOfBoxes;
+        private bool _greaterThanZero = true;
+        
+        public string BestScoreKey { get; private set; }
 
         public bool GameOn {
             get => _gameOn;
@@ -32,11 +39,6 @@ namespace Project.Scripts {
                 }
             }
         }
-
-        public UnityEvent onStartGame;
-        public UnityEvent onScoreChanged;
-        public UnityEvent onTimeChanged;
-        public UnityEvent onTimeUp;
 
         public int Score {
             get => _score;
@@ -51,34 +53,63 @@ namespace Project.Scripts {
             get => _currentTime;
             private set {
                 if (Math.Abs(_currentTime - value) < Constants.EPSILON) return;
-                if (value > 0) {
-                    _currentTime = value;
-                }
-                else {
-                    _currentTime = 0;
-                    _gameOn = false;
-                    FinishGame();
-                    onTimeUp?.Invoke();
-                }
-
-                onTimeChanged?.Invoke();
+                _currentTime = value < 0 ? 0 : value;
+                onConditionValueChanged?.Invoke();
             }
         }
 
+        public int AmountOfBoxes {
+            get => _amountOfBoxes;
+            private set {
+                if (_amountOfBoxes == value) return;
+                _amountOfBoxes = value;
+                onConditionValueChanged?.Invoke();
+            }
+        }
+        
+        public UnityEvent onStartGame;
+        public UnityEvent onScoreChanged;
+        public UnityEvent onGameEnd;
+        private UnityEvent onConditionValueChanged = new UnityEvent();
+
+        private delegate bool FinishCondition();
+
+        private FinishCondition CheckForFinish;
 
         public Target ActiveTarget => _targetController._target;
         public Box ActiveBox => _boxController.Box;
 
         private void Awake() {
-            CurrentTime = startTime;
+            _gameMode = GameMode.CurrentGameMode;
+            switch (_gameMode) {
+                case GameMode.Mode.Timer:
+                    CurrentTime = startTime;
+                    CheckForFinish = Timer;
+                    onConditionValueChanged.AddListener(canvasController.UpdateTime);
+                    BestScoreKey = Constants.TIMER_BEST_SCORE_KEY;
+                    break;
+                case GameMode.Mode.LimitedBoxes:
+                    AmountOfBoxes = amountOfBoxes;
+                    CheckForFinish = LimitedBoxes;
+                    onConditionValueChanged.AddListener(canvasController.UpdateBoxes);
+                    BestScoreKey = Constants.LIMITED_BOXES_BEST_SCORE_KEY;
+                    break;
+                case GameMode.Mode.FirstLessZero:
+                    CheckForFinish = FirstLessZero;
+                    BestScoreKey = Constants.FIRST_LESS_ZERO_BEST_SCORE_KEY;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
         }
 
         private void Update() {
-            if (CurrentTime > 0) {
-                HandleTouch();
-                if (!GameOn) return;
-                UpdateTime();
-            }
+            HandleTouch();
+            if (!GameOn) return;
+            if (!CheckForFinish.Invoke()) {
+                    OnGameEnd();
+                }
         }
 
         private void FinishGame() {
@@ -87,24 +118,39 @@ namespace Project.Scripts {
         }
 
         private void CalculateCoinsAward() {
-            var curCoins = PlayerPrefs.GetInt(Constants.COINS_KEY);
-            var toAdd = (int) (Score * Constants.SCORE_TO_COINS_COEF);
+             var toAdd = (int) (Score * Constants.SCORE_TO_COINS_COEF);
             if (toAdd > 0) { 
                 Coins.Instance.AddCoins(toAdd);
-                // PlayerPrefs.SetInt(Constants.COINS_KEY, curCoins + toAdd);
             }
         }
 
         private void CompareScores() {
-            var best = PlayerPrefs.GetInt(Constants.BEST_SCORE_KEY);
+            var best = PlayerPrefs.GetInt(BestScoreKey);
             if (Score > best) {
-                PlayerPrefs.SetInt(Constants.BEST_SCORE_KEY, Score);
+                PlayerPrefs.SetInt(BestScoreKey, Score);
             }
         }
 
-        private void UpdateTime() {
+        private bool Timer() {
             CurrentTime -= Time.deltaTime;
+            return CurrentTime > 0;
         }
+
+        private bool LimitedBoxes() {
+            return AmountOfBoxes > 0;
+        }
+
+        private bool FirstLessZero() {
+            return _greaterThanZero;
+        }
+
+        private void OnGameEnd() {
+            _gameOn = false;
+            FinishGame();
+            onGameEnd?.Invoke();
+        }
+
+        public void DecreaseAmountOfBoxes() => AmountOfBoxes--;
 
         private void HandleTouch() {
             var touchCondition = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began &&
@@ -150,7 +196,11 @@ namespace Project.Scripts {
         private int FindCurrentScore(BoxController boxController) {
             var diffVect = boxController.Box.Transform.position - boxController.ConnectedTarget.Transform.position;
             diffVect.y = 0;
-            return (int) (maximumScoreValue - diffVect.magnitude * scoreForUnitCoef);
+            var result = (int) (maximumScoreValue - diffVect.magnitude * scoreForUnitCoef);
+            if (result < 0) {
+                _greaterThanZero = false;
+            }
+            return result;
         }
 
         public void CalculateScore(BoxController boxController) {
