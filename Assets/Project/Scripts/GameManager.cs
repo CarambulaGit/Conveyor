@@ -90,7 +90,8 @@ namespace Project.Scripts {
             var curCoins = PlayerPrefs.GetInt(Constants.COINS_KEY);
             var toAdd = (int) (Score * Constants.SCORE_TO_COINS_COEF);
             if (toAdd > 0) { 
-                PlayerPrefs.SetInt(Constants.COINS_KEY, curCoins + toAdd);
+                Coins.Instance.AddCoins(toAdd);
+                // PlayerPrefs.SetInt(Constants.COINS_KEY, curCoins + toAdd);
             }
         }
 
