@@ -50,7 +50,7 @@ namespace Project.Scripts {
         }
 
         private void OnCollisionEnter(Collision other) {
-            if (_alreadyCalculated) return;
+            if (_alreadyCalculated || !_gameManager.GameOn) return;
 
             if (other.gameObject.CompareTag(Constants.CONVEYOR_TAG)) {
                 StillNotFall = false;
