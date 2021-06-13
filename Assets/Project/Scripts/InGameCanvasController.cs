@@ -14,11 +14,14 @@ namespace Project.Scripts {
         [SerializeField] private GameObject pause;
         [SerializeField] private TextMeshProUGUI scoreValue;
         [SerializeField] private TextMeshProUGUI timeValue;
+        [SerializeField] private TextMeshProUGUI scoreAfterGameValue;
+        [SerializeField] private TextMeshProUGUI bestScoreValue;
         
         private GameManager _gameManager;
 
         private void Awake() {
             _gameManager = GameObject.FindWithTag(Constants.GAME_MANAGER_TAG).GetComponent<GameManager>();
+            _gameManager.onTimeUp.AddListener(AfterGameInfoUpdate);
         }
 
         public void UpdateScore() {
@@ -68,6 +71,11 @@ namespace Project.Scripts {
         public void GoToMainMenu() {
             Time.timeScale = 1f;
             SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+        }
+
+        private void AfterGameInfoUpdate() {
+            scoreAfterGameValue.text = _gameManager.Score.ToString();
+            bestScoreValue.text = PlayerPrefs.GetInt(Constants.BEST_SCORE_KEY).ToString();
         }
     }
 }

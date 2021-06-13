@@ -57,6 +57,7 @@ namespace Project.Scripts {
                 else {
                     _currentTime = 0;
                     _gameOn = false;
+                    FinishGame();
                     onTimeUp?.Invoke();
                 }
 
@@ -77,6 +78,26 @@ namespace Project.Scripts {
                 HandleTouch();
                 if (!GameOn) return;
                 UpdateTime();
+            }
+        }
+
+        private void FinishGame() {
+            CompareScores();
+            CalculateCoinsAward();
+        }
+
+        private void CalculateCoinsAward() {
+            var curCoins = PlayerPrefs.GetInt(Constants.COINS_KEY);
+            var toAdd = (int) (Score * Constants.SCORE_TO_COINS_COEF);
+            if (toAdd > 0) { 
+                PlayerPrefs.SetInt(Constants.COINS_KEY, curCoins + toAdd);
+            }
+        }
+
+        private void CompareScores() {
+            var best = PlayerPrefs.GetInt(Constants.BEST_SCORE_KEY);
+            if (Score > best) {
+                PlayerPrefs.SetInt(Constants.BEST_SCORE_KEY, Score);
             }
         }
 
