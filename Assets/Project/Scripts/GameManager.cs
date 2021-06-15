@@ -76,6 +76,8 @@ namespace Project.Scripts {
 
         private FinishCondition CheckForFinish;
 
+        private Action<int> SaveBestToLeaderboard;
+
         public Target ActiveTarget => _targetController._target;
         public Box ActiveBox => _boxController.Box;
 
@@ -87,16 +89,19 @@ namespace Project.Scripts {
                     CheckForFinish = Timer;
                     onConditionValueChanged.AddListener(canvasController.UpdateTime);
                     BestScoreKey = Constants.TIMER_BEST_SCORE_KEY;
+                    SaveBestToLeaderboard = GPSLeaderboard.SaveBestTimerResult;
                     break;
                 case GameMode.Mode.LimitedBoxes:
                     AmountOfBoxes = amountOfBoxes;
                     CheckForFinish = LimitedBoxes;
                     onConditionValueChanged.AddListener(canvasController.UpdateBoxes);
                     BestScoreKey = Constants.LIMITED_BOXES_BEST_SCORE_KEY;
+                    SaveBestToLeaderboard = GPSLeaderboard.SaveBestLimitedBoxesResult;
                     break;
                 case GameMode.Mode.FirstLessZero:
                     CheckForFinish = FirstLessZero;
                     BestScoreKey = Constants.FIRST_LESS_ZERO_BEST_SCORE_KEY;
+                    SaveBestToLeaderboard = GPSLeaderboard.SaveBestFirstLessZeroResult;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -108,8 +113,8 @@ namespace Project.Scripts {
             HandleTouch();
             if (!GameOn) return;
             if (!CheckForFinish.Invoke()) {
-                    OnGameEnd();
-                }
+                OnGameEnd();
+            }
         }
 
         private void FinishGame() {
@@ -128,6 +133,9 @@ namespace Project.Scripts {
             var best = PlayerPrefs.GetInt(BestScoreKey);
             if (Score > best) {
                 PlayerPrefs.SetInt(BestScoreKey, Score);
+                if (GPSLeaderboard.Activated) {
+                   SaveBestToLeaderboard?.Invoke(Score); 
+                }
             }
         }
 

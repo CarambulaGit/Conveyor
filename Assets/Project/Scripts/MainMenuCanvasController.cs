@@ -66,6 +66,10 @@ namespace Project.Scripts {
             gameModes.SetActive(_gameModes);
         }
 
+        public void OnLeaderboard() {
+            GPSLeaderboard.ShowLeaderboard();
+        }
+
         private void UpdateCoins() {
             coins.text = Coins.Instance.CoinsValue.ToString();
         }
