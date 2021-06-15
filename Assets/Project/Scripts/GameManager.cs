@@ -26,7 +26,7 @@ namespace Project.Scripts {
         private float _currentTime;
         private int _amountOfBoxes;
         private bool _greaterThanZero = true;
-        
+
         public string BestScoreKey { get; private set; }
 
         public bool GameOn {
@@ -66,7 +66,7 @@ namespace Project.Scripts {
                 onConditionValueChanged?.Invoke();
             }
         }
-        
+
         public UnityEvent onStartGame;
         public UnityEvent onScoreChanged;
         public UnityEvent onGameEnd;
@@ -106,7 +106,6 @@ namespace Project.Scripts {
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
         }
 
         private void Update() {
@@ -123,8 +122,8 @@ namespace Project.Scripts {
         }
 
         private void CalculateCoinsAward() {
-             var toAdd = (int) (Score * Constants.SCORE_TO_COINS_COEF);
-            if (toAdd > 0) { 
+            var toAdd = (int) (Score * Constants.SCORE_TO_COINS_COEF);
+            if (toAdd > 0) {
                 Coins.Instance.AddCoins(toAdd);
             }
         }
@@ -134,7 +133,7 @@ namespace Project.Scripts {
             if (Score > best) {
                 PlayerPrefs.SetInt(BestScoreKey, Score);
                 if (GPSLeaderboard.Activated) {
-                   SaveBestToLeaderboard?.Invoke(Score); 
+                    SaveBestToLeaderboard?.Invoke(Score);
                 }
             }
         }
@@ -208,6 +207,7 @@ namespace Project.Scripts {
             if (result < 0) {
                 _greaterThanZero = false;
             }
+
             return result;
         }
 
