@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Project.Classes;
 using Project.ScriptableObjects;
 using TMPro;
@@ -12,15 +13,16 @@ namespace Project.Scripts {
         [SerializeField] private GameObject menu;
         [SerializeField] private GameObject shop;
         [SerializeField] private GameObject gameModes;
+        [SerializeField] private GameObject iAP;
         [SerializeField] private List<ConveyorMaterialManager> materialsManagers;
-        [SerializeField] private TextMeshProUGUI coins;
+        [SerializeField] private List<TextMeshProUGUI> coins;
 
         public List<ConveyorMaterial> _conveyorMaterials { get; private set; } = new List<ConveyorMaterial>();
 
         public int GetMaterialIndex(ConveyorMaterialManager manager) {
             return materialsManagers.FindIndex(elem => elem.Equals(manager));
-        } 
-        
+        }
+
         private void Awake() {
             foreach (var manager in materialsManagers) {
                 _conveyorMaterials.Add(new ConveyorMaterial(manager.GetMaterial()));
@@ -34,7 +36,7 @@ namespace Project.Scripts {
         }
 
         public void Play() {
-            Activate(false, false, true);
+            Activate(false, false, true, false);
         }
 
         public void StartTimerMode() {
@@ -53,25 +55,36 @@ namespace Project.Scripts {
         }
 
         public void ActivateShop() {
-            Activate(false, true, false);
+            Activate(false, true, false, false);
         }
 
-        public void BackToMenu() {
-            Activate(true, false, false);
+        public void ActivateMenu() {
+            Activate(true, false, false, false);
         }
 
-        private void Activate(bool _menu, bool _shop, bool _gameModes) {
+        public void ActivateIAP() {
+            Activate(false, false, false, true);
+        }
+
+        private void Activate(bool _menu, bool _shop, bool _gameModes, bool _iAP) {
             menu.SetActive(_menu);
             shop.SetActive(_shop);
             gameModes.SetActive(_gameModes);
+            iAP.SetActive(_iAP);
         }
 
-        public void OnLeaderboard() {
+        public void ShowLeaderboard() {
             GPSLeaderboard.ShowLeaderboard();
         }
 
         private void UpdateCoins() {
-            coins.text = Coins.Instance.CoinsValue.ToString();
+            foreach (var coin in coins) {
+                coin.text = Coins.Instance.CoinsValue.ToString();
+            }
+        }
+
+        public void ShowAd() {
+            Ads.Instance.ShowRewardAd();
         }
     }
 }

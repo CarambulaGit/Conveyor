@@ -28,5 +28,14 @@
         public const string FIRST_LESS_ZERO_BEST_SCORE_KEY = "firstLessZeroBestScore";
 
         #endregion
+
+        #region Ads
+
+        public const string ADS_ANDROID_KEY = "4172047";
+        // public const string rewardPlacement = "rewardedVideo";
+        public const int rewardValue = 100;
+        public const string rewardPlacement = "Rewarded_Android";
+
+        #endregion
     }
 }
