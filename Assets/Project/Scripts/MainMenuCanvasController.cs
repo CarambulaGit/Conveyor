@@ -86,5 +86,9 @@ namespace Project.Scripts {
         public void ShowAd() {
             Ads.Instance.ShowRewardAd();
         }
+
+        public void BuyCoins(int value) {
+            Coins.Instance.AddCoins(value);
+        }
     }
 }

@@ -4,7 +4,6 @@ using Project.Classes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Project.Scripts {
     public class InGameCanvasController : MonoBehaviour {
